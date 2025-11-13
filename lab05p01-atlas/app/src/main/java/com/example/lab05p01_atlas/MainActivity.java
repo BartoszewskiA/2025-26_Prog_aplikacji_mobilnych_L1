@@ -12,6 +12,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
 
     TextView tv_nazwa, tv_opis;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
                         R.drawable.muchomor,
                         R.drawable.kania};
     int pozycja=0;
+    Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +40,14 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        pozycja = random.nextInt(grafiki.length);
         nazwy = getResources().getStringArray(R.array.nazwy);
         opisy = getResources().getStringArray(R.array.opisy);
         znajdzKontrolki();
         tv_nazwa.setText(nazwy[pozycja]);
         tv_opis.setText(opisy[pozycja]);
         iv_grafika.setImageResource(grafiki[pozycja]);
-        btn_poprzedni.setEnabled(false);
+        sprawdz_przyciski();
         obslugaPrzyciskow();
     }
 
@@ -57,15 +61,7 @@ public class MainActivity extends AppCompatActivity {
                else if(Id==R.id.btn_pp)
                     pozycja--;
                //------------------------
-               if(pozycja==grafiki.length-1)
-                   btn_następny.setEnabled(false);
-               else
-                   btn_następny.setEnabled(true);
-                if(pozycja==0)
-                    //pozycja=0;
-                    btn_poprzedni.setEnabled(false);
-                else
-                    btn_poprzedni.setEnabled(true);
+                sprawdz_przyciski();
 
                 tv_nazwa.setText(nazwy[pozycja]);
                 tv_opis.setText(opisy[pozycja]);
@@ -74,6 +70,17 @@ public class MainActivity extends AppCompatActivity {
         };
         btn_poprzedni.setOnClickListener(sluchacz);
         btn_następny.setOnClickListener(sluchacz);
+    }
+
+    private void sprawdz_przyciski() {
+        if(pozycja==grafiki.length-1)
+            btn_następny.setEnabled(false);
+        else
+            btn_następny.setEnabled(true);
+        if(pozycja==0)
+            btn_poprzedni.setEnabled(false);
+        else
+            btn_poprzedni.setEnabled(true);
     }
 
     private void znajdzKontrolki() {
